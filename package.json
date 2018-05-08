@@ -1,0 +1,14 @@
+{
+  "name": "poly-editor",
+  "version": "1.0.0",
+  "description": "Polygon editor for browser",
+  "main": "index.js",
+  "scripts": {
+    "test": " "
+  },
+  "author": "Carlos Frias <carlos.a.frias@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^5.0.0-alpha.2"
+  }
+}

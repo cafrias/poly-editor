@@ -1,0 +1,9 @@
+#map {
+  width: 100%;
+  height: 350px;
+}
+
+#poly {
+  width: 100%;
+  display: block;
+}
