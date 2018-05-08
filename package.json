@@ -2,13 +2,15 @@
   "name": "poly-editor",
   "version": "1.0.0",
   "description": "Polygon editor for browser",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "test": " "
+    "start": "serve -c='-1' -p='8080' -u .",
+    "build": "if [ ! -d ./dist ]; then mkdir -p ./dist; fi && cp ./src/index.js ./dist/poly-editor.js"
   },
   "author": "Carlos Frias <carlos.a.frias@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^5.0.0-alpha.2"
+    "eslint": "^5.0.0-alpha.2",
+    "serve": "^6.5.6"
   }
 }
