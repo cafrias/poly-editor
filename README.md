@@ -11,6 +11,11 @@ Go to `localhost:8080/public/index.html`.
 
 ## Usage
 
+Build project: `npm run build`.
+
+Import file built in HTML: `<script src="dist/poly-editor.js"></script>`.
+
+In HTML file:
 ``` javascript
 function initMap() {
 
