@@ -5,6 +5,8 @@ Contains a Polygon editor for Google Maps, coordinates of polygons drawn to the 
 
 ## Development
 
+Copy `public/index.html.dist` contents into `public/index.html` replacing `<API_KEY>` with your Google Maps API Key.
+
 To start development server, run: `npm start`.
 
 Go to `localhost:8080/public/index.html`.
