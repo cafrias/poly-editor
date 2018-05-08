@@ -12,10 +12,16 @@
 <body>
   <div id="map"></div>
   <input type="text" id="poly" value="POLYGON((-67.69403098252565 -53.78989650350527,-67.69716380265504 -53.791290848688504,-67.6946532550171 -53.79115141625579,-67.69317267564088 -53.79027678406075))">
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUsjLQICejX19tpLUE8ABKlsRnfqREw-4&libraries=drawing" async
-    defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUsjLQICejX19tpLUE8ABKlsRnfqREw-4&libraries=drawing&callback=onMapLoad"
+    async defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./index.js"></script>
+  <script>
+    function onMapLoad() {
+      var ped = new PolyEditor(document.getElementById('map'), document.getElementById('poly'));
+      ped.init();
+    }
+  </script>
 </body>
 
 </html>
