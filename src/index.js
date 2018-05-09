@@ -4,7 +4,7 @@
 
 /**
  * Initializes the PolyEditor
- * @varructor
+ * @constructor
  */
 function PolyEditor(container, field) {
   this.field = field;
@@ -163,7 +163,7 @@ PolyEditor.prototype.initDrawManager = function () {
     polygonOptions: PolyEditor.polyOptions,
   });
 
-  google.maps.event.addListener(this.drawManager, 'polygoncompvare', this.setPolygon.bind(this));
+  google.maps.event.addListener(this.drawManager, 'polygoncomplete', this.setPolygon.bind(this));
 
   this.drawManager.setMap(this.map);
 };
