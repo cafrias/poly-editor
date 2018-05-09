@@ -11,6 +11,7 @@ function PolyEditor(container, field) {
 
   if (field && typeof field.value === 'string' && field.value !== '') {
     this.polygon = PolyEditor.ParseStringToPolygon(field.value);
+    this.setPolygon(this.polygon);
   } else {
     this.polygon = null;
   }
@@ -38,7 +39,7 @@ PolyEditor.prototype.centerOnPolygon = function (poly) {
  * Creates a new polygon.
  * @param {*} poly 
  */
-PolyEditor.prototype.createPolygon = function (poly) {
+PolyEditor.prototype.setPolygon = function (poly) {
   // If polygon exists, remove it from map.
   if (this.polygon) {
     this.polygon.setMap(null);
@@ -82,6 +83,10 @@ PolyEditor.ParsePolygonToString = function (poly) {
 
 PolyEditor.PolyRegex = /^POLYGON\((?:(?:\(((?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\),?)*)\)$/g;
 
+/**
+ * Takes in a string and parses it into a polygon, following string POLYGON SQL format.
+ * @param {string} str 
+ */
 PolyEditor.ParseStringToPolygon = function (str) {
   let paths = [];
   let ret;
@@ -158,7 +163,7 @@ PolyEditor.prototype.initDrawManager = function () {
     polygonOptions: PolyEditor.polyOptions,
   });
 
-  google.maps.event.addListener(this.drawManager, 'polygoncomplete', this.createPolygon.bind(this));
+  google.maps.event.addListener(this.drawManager, 'polygoncomplete', this.setPolygon.bind(this));
 
   this.drawManager.setMap(this.map);
 };
