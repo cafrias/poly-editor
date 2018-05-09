@@ -5,12 +5,13 @@
   "main": "./src/index.js",
   "scripts": {
     "start": "serve -c='-1' -p='8080' -u .",
-    "build": "if [ ! -d ./dist ]; then mkdir -p ./dist; fi && cp ./src/index.js ./dist/poly-editor.js"
+    "build": "uglifyjs src/index.js -o dist/poly-editor.js --compress --mangle"
   },
   "author": "Carlos Frias <carlos.a.frias@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^5.0.0-alpha.2",
-    "serve": "^6.5.6"
+    "serve": "^6.5.6",
+    "uglify-js": "^3.3.24"
   }
 }

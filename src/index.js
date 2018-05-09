@@ -4,7 +4,7 @@
 
 /**
  * Initializes the PolyEditor
- * @constructor
+ * @varructor
  */
 function PolyEditor(container, field) {
   this.field = field;
@@ -28,7 +28,7 @@ PolyEditor.prototype.centerOnPolygon = function (poly) {
   var bounds = new google.maps.LatLngBounds();
   var polyCoords = poly.getPath();
 
-  for (let i = 0; i < polyCoords.length; i++) {
+  for (var i = 0; i < polyCoords.length; i++) {
     bounds.extend(polyCoords[i]);
   }
 
@@ -71,14 +71,14 @@ PolyEditor.prototype.AddEventsToPolygon = function (poly) {
  * @param {*} poly 
  */
 PolyEditor.ParsePolygonToString = function (poly) {
-  const path = poly.getPath();
+  var path = poly.getPath();
 
-  let pointsStr = '';
-  path.forEach(p => {
-    pointsStr += `${p.lng()} ${p.lat()},`;
+  var pointsStr = '';
+  path.forEach(function (p) {
+    pointsStr += p.lng() + ' ' + p.lat();
   });
 
-  return `POLYGON((${pointsStr.slice(0, -1)}))`;
+  return 'POLYGON((' + pointsStr.slice(0, -1) + '))';
 };
 
 PolyEditor.PolyRegex = /^POLYGON\((?:(?:\(((?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\),?)*)\)$/g;
@@ -88,8 +88,8 @@ PolyEditor.PolyRegex = /^POLYGON\((?:(?:\(((?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)
  * @param {string} str 
  */
 PolyEditor.ParseStringToPolygon = function (str) {
-  let paths = [];
-  let ret;
+  var paths = [];
+  var ret;
 
   do {
     ret = PolyEditor.PolyRegex.exec(str);
@@ -100,10 +100,10 @@ PolyEditor.ParseStringToPolygon = function (str) {
 
   if (paths.length > 0) {
     // Just single path for now.
-    let points = paths[0].split(',');
+    var points = paths[0].split(',');
 
-    let coordinates = points.map((coordStr) => {
-      let coord = coordStr.split(' ');
+    var coordinates = points.map(function (coordStr) {
+      var coord = coordStr.split(' ');
 
       return new google.maps.LatLng(coord[1], coord[0]);
     });
@@ -163,7 +163,7 @@ PolyEditor.prototype.initDrawManager = function () {
     polygonOptions: PolyEditor.polyOptions,
   });
 
-  google.maps.event.addListener(this.drawManager, 'polygoncomplete', this.setPolygon.bind(this));
+  google.maps.event.addListener(this.drawManager, 'polygoncompvare', this.setPolygon.bind(this));
 
   this.drawManager.setMap(this.map);
 };
