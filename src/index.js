@@ -62,13 +62,26 @@ PolyEditor.prototype.AddEventsToPolygon = function (poly) {
   google.maps.event.addListener(poly.getPath(), 'remove_at', this.updateField.bind(this));
 
   google.maps.event.addListener(poly, 'rightclick', (function (poly, e) {
-    var del = new this.DeleteMenu(this.deletePolygon.bind(this));
+    var del = new this.DeleteMenu(this.deletePolygon.bind(this, poly));
     del.open(this.map, this.poly, e.latLng);
   }).bind(this, poly));
 };
 
 PolyEditor.prototype.deletePolygon = function (poly) {
-  console.log('delete poly');
+  var idx = this.paths.indexOf(poly);
+
+  if (idx === -1) {
+    return;
+  }
+
+  poly.setMap(null);
+
+  this.paths = [].concat(
+    this.paths.slice(0, idx),
+    this.paths.slice(idx + 1)
+  );
+
+  this.updateField();
 };
 
 /**
