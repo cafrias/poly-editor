@@ -89,16 +89,22 @@ PolyEditor.prototype.deletePolygon = function (poly) {
  * @param {*} poly 
  */
 PolyEditor.prototype.ParsePathsToString = function () {
-  var pathsStr = this.paths.map(function (path) {
+  var pathsStr = this.paths.map(function (poly) {
     var pointsStr = '';
 
-    path.getPath().forEach(function (p) {
+    var path = [].concat(poly.getPath().getArray());
+
+    // SQL POLYGON requires first point same as last one.
+    path.push(path[0]);
+
+    path.forEach(function (p) {
       pointsStr += p.lng() + ' ' + p.lat() + ',';
     });
 
     return '(' + pointsStr.slice(0, -1) + ')';
   }, this);
 
+  // pathsStr.push(pathsStr[0]);
 
   return 'POLYGON(' + pathsStr.join(', ') + ')';
 };
