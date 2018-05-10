@@ -106,10 +106,10 @@ PolyEditor.prototype.ParsePathsToString = function () {
 
   // pathsStr.push(pathsStr[0]);
 
-  return 'POLYGON(' + pathsStr.join(', ') + ')';
+  return pathsStr.join(', ');
 };
 
-PolyEditor.PolyRegex = /^POLYGON\(((?:\((?:(?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\)(?:, )?)*)\)$/g;
+PolyEditor.PolyRegex = /^(?:\((?:(?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\)(?:, )?)*$/g;
 
 /**
  * Takes in a string and parses it into a polygon, following string POLYGON SQL format.
@@ -120,7 +120,7 @@ PolyEditor.ParseStringToPaths = function (strIn) {
 
   // If matches SQL format ...
   if (strMatch) {
-    var strPolys = strMatch[1].match(/\(.*?\)/g);
+    var strPolys = strMatch[0].match(/\(.*?\)/g);
 
     if (strPolys) {
       var polys = strPolys.map(function (strPoly) {

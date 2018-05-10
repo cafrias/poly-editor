@@ -1,6 +1,6 @@
 # Poly Editor
 
-Contains a Polygon editor for Google Maps, coordinates of polygons drawn to the map are printed into a form field, in POLYGON sql format.
+Contains a Polygon editor for Google Maps, coordinates of polygons drawn to the map are printed into a form field, in POLYGON sql format, only the paths, e.g. SQL: `POLYGON((0,1,1,0),(2,2,1,2))`, Poly Editor output: `(0,1,1,0),(2,2,1,2)`.
 
 ## TODO
 
