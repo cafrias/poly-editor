@@ -4,8 +4,8 @@ Contains a Polygon editor for Google Maps, coordinates of polygons drawn to the 
 
 ## TODO
 
-- [] Allow set default center and zoom
-- [] Rewrite to Typescript
+- [ ] Allow set default center and zoom
+- [ ] Rewrite to Typescript
 
 ## Development
 
