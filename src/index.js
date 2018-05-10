@@ -6,9 +6,13 @@
  * Initializes the PolyEditor
  * @constructor
  */
-function PolyEditor(container, field) {
+function PolyEditor(container, field, mapOptions) {
   this.field = field;
   this.paths = [];
+  this.mapOptions = mapOptions || {
+    center: { lat: -53.79087255, lng: -67.69589780000001 },
+    zoom: 16,
+  };
 
   if (field && typeof field.value === 'string' && field.value !== '') {
     var paths = PolyEditor.ParseStringToPaths(field.value);
@@ -169,12 +173,9 @@ PolyEditor.prototype.init = function () {
  * Initializes map.
  */
 PolyEditor.prototype.initMap = function () {
-  this.map = new google.maps.Map(this.container, {
-    center: { lat: -53.79087255, lng: -67.69589780000001 },
-    zoom: 16,
-  });
+  this.map = new google.maps.Map(this.container, this.mapOptions);
 
-  if (this.paths) {
+  if (this.paths.length > 0) {
     this.paths.forEach(function (path) { path.setMap(this.map); }, this);
     this.centerOnPolygon();
   }
