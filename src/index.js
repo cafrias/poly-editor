@@ -274,7 +274,7 @@ PolyEditor.prototype.initDeleteMenu = function () {
   };
 
   /**
-   * Opens the menu at a vertex of a given path.
+   * Opens the menu.
    */
   this.DeleteMenu.prototype.open = function (map, poly, position) {
     this.set('polygon', poly);
