@@ -106,10 +106,10 @@ PolyEditor.prototype.ParsePathsToString = function () {
 
   // pathsStr.push(pathsStr[0]);
 
-  return pathsStr.join(', ');
+  return pathsStr.join(',');
 };
 
-PolyEditor.PolyRegex = /^(?:\((?:(?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\)(?:, )?)*$/g;
+PolyEditor.PolyRegex = /^(?:\((?:(?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\),?)*$/g;
 
 /**
  * Takes in a string and parses it into a polygon, following string POLYGON SQL format.
