@@ -27,13 +27,15 @@ function PolyEditor(container, field) {
 /**
  * Centers map on polygon `poly`.
  */
-PolyEditor.prototype.centerOnPolygon = function (poly) {
+PolyEditor.prototype.centerOnPolygon = function () {
   var bounds = new google.maps.LatLngBounds();
-  var polyCoords = poly.getPath();
 
-  for (var i = 0; i < polyCoords.length; i++) {
-    bounds.extend(polyCoords[i]);
-  }
+  this.paths.forEach(function (poly) {
+    var polyCoords = poly.getPath();
+    polyCoords.forEach(function (coord) {
+      bounds.extend(coord);
+    });
+  });
 
   this.map.fitBounds(bounds);
 };
@@ -174,6 +176,7 @@ PolyEditor.prototype.initMap = function () {
 
   if (this.paths) {
     this.paths.forEach(function (path) { path.setMap(this.map); }, this);
+    this.centerOnPolygon();
   }
 };
 
