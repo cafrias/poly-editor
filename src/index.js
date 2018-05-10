@@ -8,12 +8,15 @@
  */
 function PolyEditor(container, field) {
   this.field = field;
+  this.paths = [];
 
   if (field && typeof field.value === 'string' && field.value !== '') {
-    this.polygon = PolyEditor.ParseStringToPolygon(field.value);
-    this.setPolygon(this.polygon);
-  } else {
-    this.polygon = null;
+    var paths = PolyEditor.ParseStringToPaths(field.value);
+    if (paths) {
+      paths.forEach(function (path) {
+        this.setPolygon(path);
+      }, this);
+    }
   }
 
   this.container = container;
@@ -40,19 +43,12 @@ PolyEditor.prototype.centerOnPolygon = function (poly) {
  * @param {*} poly 
  */
 PolyEditor.prototype.setPolygon = function (poly) {
-  // If polygon exists, remove it from map.
-  if (this.polygon) {
-    this.polygon.setMap(null);
-  }
-
-  this.polygon = poly;
-  this.AddEventsToPolygon(this.polygon);
-
-  this.updateField();
+  this.AddEventsToPolygon(poly);
+  this.paths.push(poly);
 };
 
 PolyEditor.prototype.updateField = function () {
-  this.field.value = PolyEditor.ParsePolygonToString(this.polygon);
+  this.field.value = this.ParsePathsToString();
 };
 
 /**
@@ -79,50 +75,53 @@ PolyEditor.prototype.deletePolygon = function (poly) {
  * Parses a polygon to string.
  * @param {*} poly 
  */
-PolyEditor.ParsePolygonToString = function (poly) {
-  var path = poly.getPath();
+PolyEditor.prototype.ParsePathsToString = function () {
+  var pathsStr = this.paths.map(function (path) {
+    var pointsStr = '';
 
-  var pointsStr = '';
-  path.forEach(function (p) {
-    pointsStr += p.lng() + ' ' + p.lat();
-  });
+    path.getPath().forEach(function (p) {
+      pointsStr += p.lng() + ' ' + p.lat() + ',';
+    });
 
-  return 'POLYGON((' + pointsStr.slice(0, -1) + '))';
+    return '(' + pointsStr.slice(0, -1) + ')';
+  }, this);
+
+
+  return 'POLYGON(' + pathsStr.join(', ') + ')';
 };
 
-PolyEditor.PolyRegex = /^POLYGON\((?:(?:\(((?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\),?)*)\)$/g;
+PolyEditor.PolyRegex = /^POLYGON\(((?:\((?:(?:-?\d+(?:\.\d+)? -?\d+(?:\.\d+)?,?)+)\)(?:, )?)*)\)$/g;
 
 /**
  * Takes in a string and parses it into a polygon, following string POLYGON SQL format.
  * @param {string} str 
  */
-PolyEditor.ParseStringToPolygon = function (str) {
-  var paths = [];
-  var ret;
+PolyEditor.ParseStringToPaths = function (strIn) {
+  var strMatch = PolyEditor.PolyRegex.exec(strIn);
 
-  do {
-    ret = PolyEditor.PolyRegex.exec(str);
-    if (ret) {
-      paths.push(ret[1]);
+  // If matches SQL format ...
+  if (strMatch) {
+    var strPolys = strMatch[1].match(/\(.*?\)/g);
+
+    if (strPolys) {
+      var polys = strPolys.map(function (strPoly) {
+        var strCoords = strPoly.slice(1, -1).split(',');
+        var path = strCoords.map(function (strCoord) {
+          var c = strCoord.split(' ');
+          return new google.maps.LatLng(parseFloat(c[1]), parseFloat(c[0]));
+        });
+
+        return new google.maps.Polygon(Object.assign({
+          path: path,
+        }, PolyEditor.polyOptions));
+      });
+
+      return polys;
     }
-  } while (ret);
-
-  if (paths.length > 0) {
-    // Just single path for now.
-    var points = paths[0].split(',');
-
-    var coordinates = points.map(function (coordStr) {
-      var coord = coordStr.split(' ');
-
-      return new google.maps.LatLng(coord[1], coord[0]);
-    });
-
-    return new google.maps.Polygon(Object.assign({}, PolyEditor.polyOptions, {
-      path: coordinates,
-    }));
   }
 
-  return null;
+  // If not ...
+  return [];
 };
 
 PolyEditor.polyOptions = {
@@ -154,8 +153,8 @@ PolyEditor.prototype.initMap = function () {
     zoom: 16,
   });
 
-  if (this.polygon) {
-    this.polygon.setMap(this.map);
+  if (this.paths) {
+    this.paths.forEach(function (path) { path.setMap(this.map); }, this);
   }
 };
 
@@ -173,7 +172,10 @@ PolyEditor.prototype.initDrawManager = function () {
     polygonOptions: PolyEditor.polyOptions,
   });
 
-  google.maps.event.addListener(this.drawManager, 'polygoncomplete', this.setPolygon.bind(this));
+  google.maps.event.addListener(this.drawManager, 'polygoncomplete', (function (poly) {
+    this.setPolygon(poly);
+    this.updateField();
+  }).bind(this));
 
   this.drawManager.setMap(this.map);
 };
