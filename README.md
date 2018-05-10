@@ -2,6 +2,10 @@
 
 Contains a Polygon editor for Google Maps, coordinates of polygons drawn to the map are printed into a form field, in POLYGON sql format.
 
+## TODO
+
+- [] Allow set default center and zoom
+- [] Rewrite to Typescript
 
 ## Development
 
